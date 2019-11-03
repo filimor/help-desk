@@ -7,7 +7,16 @@ $arquivo = fopen("arquivo.txt",'r');
 
 while(!feof($arquivo)){
   $registro = fgets($arquivo);
-  $chamados[] = $registro;
+  $registro_detalhes = explode('#', $registro);
+  if($_SESSION['perfil_id'] == 2){
+    if($_SESSION['id'] != $registro_detalhes[0]){
+      continue;
+    } else {
+      $chamados[] = $registro;
+    }
+  } else {
+    $chamados[] = $registro;
+  }
 }
 
 fclose($arquivo);
@@ -58,15 +67,11 @@ fclose($arquivo);
               <?php 
               foreach($chamados as $chamado){ 
                 $chamado_dados = explode('#', $chamado);
-                if($_SESSION['perfil_id'] == 2){
-                  if($_SESSION['id'] != $chamado_dados[0]){
-                    continue;
-                  }
-                }
                 if(count($chamado_dados) < 3){
                   continue;
                 }
               ?>
+              
               <div class="card mb-3 bg-light">
                 <div class="card-body">
                   <h5 class="card-title"><?=$chamado_dados[1]?></h5>
